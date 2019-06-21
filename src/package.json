@@ -1,48 +1,42 @@
 {
-  "name": "website-name",
-  "version": "0.1.0",
-  "description": "Website description here.",
-  "main": "js/main.js",
-  "scripts": {
-    "gulp": "ts-node -O {\\\\\\\\\\\\\\\"esModuleInterop\\\\\\\\\\\\\\\":true} gulpfile.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/T99/ampel-feedback.git"
-  },
-  "private": true,
-  "keywords": [
-    "webapp",
-    "dashboard",
-    "dashboard",
-    "feedback"
-  ],
-  "author": "Trevor Sears <trevorsears.main@gmail.com>",
-  "license": "GPL-3.0-or-later",
-  "bugs": {
-    "url": "https://github.com/T99/ampel-feedback/issues"
-  },
-  "homepage": "https://github.com/T99/ampel-feedback#readme",
-  "dependencies": {
-    "regenerator-runtime": "^0.13.2"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.4.5",
-    "@babel/preset-env": "^7.4.5",
-    "babelify": "^10.0.0",
-    "browserify": "^16.2.3",
-    "del": "^4.1.1",
-    "gulp": "^4.0.2",
-    "gulp-babel": "^8.0.0",
-    "gulp-clean-css": "^4.2.0",
-    "gulp-htmlmin": "^5.0.1",
-    "gulp-imagemin": "^6.0.0",
-    "gulp-sass": "^4.0.2",
-    "gulp-sourcemaps": "^2.6.5",
-    "gulp-typescript": "^5.0.1",
-    "gulp-uglify-es": "^1.0.4",
-    "typescript": "^3.5.2",
-    "vinyl-buffer": "^1.0.1",
-    "vinyl-source-stream": "^2.0.0"
-  }
+	"name": "website-name",
+	"version": "0.1.0",
+	"description": "Website description here.",
+	"main": "js/main.js",
+	"scripts": {
+		"gulp": "gulp"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/T99/website-name.git"
+	},
+	"keywords": [],
+	"author": "Trevor Sears <trevorsears.main@gmail.com>",
+	"license": "GPL-3.0-or-later",
+	"bugs": {
+		"url": "https://github.com/T99/website-name/issues"
+	},
+	"homepage": "https://github.com/T99/website-name#readme",
+	"dependencies": {
+		"regenerator-runtime": "^0.13.2"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.4.5",
+		"@babel/preset-env": "^7.4.5",
+		"babelify": "^10.0.0",
+		"browserify": "^16.2.3",
+		"del": "^4.1.1",
+		"gulp": "^4.0.2",
+		"gulp-babel": "^8.0.0",
+		"gulp-clean-css": "^4.2.0",
+		"gulp-htmlmin": "^5.0.1",
+		"gulp-imagemin": "^6.0.0",
+		"gulp-sass": "^4.0.2",
+		"gulp-sourcemaps": "^2.6.5",
+		"gulp-typescript": "^5.0.1",
+		"gulp-uglify-es": "^1.0.4",
+		"typescript": "^3.5.2",
+		"vinyl-buffer": "^1.0.1",
+		"vinyl-source-stream": "^2.0.0"
+	}
 }
