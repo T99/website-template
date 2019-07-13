@@ -7,6 +7,7 @@
 const gulp =		require("gulp");
 const sourcemaps =	require("gulp-sourcemaps");
 const typescript =	require("gulp-typescript");
+const webpack =		require("webpack");
 const browserify =	require("browserify");
 const uglify =		require("gulp-uglify-es").default;
 const source =		require('vinyl-source-stream');
@@ -16,6 +17,7 @@ const cleanCSS =	require("gulp-clean-css");
 const imagemin =	require("gulp-imagemin");
 const htmlmin =		require("gulp-htmlmin");
 const del =			require("del");
+const path =		require("path");
 
 let paths = {
 	
@@ -43,7 +45,8 @@ let paths = {
 		allFiles: "../dist/js/**/*.js",
 		entryPoint: "../dist/js/main.js",
 		entryPointFileName: "main.js",
-		bundleFile: "../dist/js/bundle.js"
+		bundleFile: "../dist/js/bundle.js",
+		bundleFileName: "bundle.js"
 		
 	},
 	
@@ -101,6 +104,38 @@ let paths = {
 	}
 	
 };
+let webpackConfig = {
+	
+	devtool: "source-map",
+	
+	entry: "../dist/js/main.js",
+	
+	output: {
+		
+		path: path.resolve(paths.javascript.dir),
+		filename: "bundle.js"
+		
+	},
+	
+	module: {
+		
+		rules : [
+			
+			{
+				
+				test: /\.js$/,
+				exclude: /node_modules/,
+				use: ['babel-loader'],
+				
+			}
+		
+		]
+		
+	},
+	
+	plugins: []
+	
+};
 
 let typescriptProject = typescript.createProject(paths.typescript.tsconfig);
 let verbose = false;
@@ -124,6 +159,9 @@ let verbose = false;
 	
 	// Compile/build all relevant stylesheets.
 	gulp.task("build-styles", buildStylesPipeline);
+	
+	// Compile/build all other miscellaneous files.
+	gulp.task("build-misc", miscOpsPipeline);
 	
 	// Watch for changes to relevant files and compile-on-change.
 	gulp.task("watch", watch);
@@ -168,7 +206,7 @@ let verbose = false;
 		return gulp.series(
 			symlinkNodeModules,
 			compileTypeScript,
-			browserifyJavaScript,
+			transpileJavaScript,
 			gulp.parallel(
 				cleanJavaScriptFiles,
 				uglifyJavaScript
@@ -194,17 +232,17 @@ let verbose = false;
 		
 	}
 	
-	function browserifyJavaScript(done) {
+	function transpileJavaScript(done) {
 		
-		return browserify({
-				transform: [["babelify", { "presets": ["@babel/preset-env"] }]],
-				debug: true,
-				entries: [paths.javascript.entryPointFileName],
-				basedir: paths.javascript.dir
-			}).bundle()
-			.pipe(source("bundle.js"))
-			.pipe(buffer())
-			.pipe(gulp.dest(paths.javascript.dir));
+		return new Promise(resolve => webpack(webpackConfig, (err, stats) => {
+			
+			if (err) console.log('Webpack', err);
+			
+			console.log(stats.toString({ /* stats options */ }));
+			
+			resolve();
+			
+		}))
 		
 	}
 	
@@ -273,7 +311,11 @@ let verbose = false;
 	function minifyImages(done) {
 		
 		return gulp.src(paths.images.srcFiles)
-			.pipe(imagemin({ verbose }))
+			.pipe(imagemin([
+				imagemin.svgo({
+					plugins: [ {removeViewBox: false} ]
+				})
+			]))
 			.pipe(gulp.dest(paths.images.distDir));
 		
 	}
@@ -281,7 +323,11 @@ let verbose = false;
 	function minifyHTML(done) {
 	
 		return gulp.src(paths.html.srcFiles)
-			.pipe(htmlmin())
+			.pipe(htmlmin({
+				collapseInlineTagWhitespace: true,
+				collapseWhitespace: true,
+				removeComments: true
+			}))
 			.pipe(gulp.dest(paths.html.distDir));
 	
 	}
