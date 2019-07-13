@@ -8,14 +8,12 @@ const gulp =		require("gulp");
 const sourcemaps =	require("gulp-sourcemaps");
 const typescript =	require("gulp-typescript");
 const webpack =		require("webpack");
-const browserify =	require("browserify");
 const uglify =		require("gulp-uglify-es").default;
-const source =		require('vinyl-source-stream');
-const buffer =		require('vinyl-buffer');
 const sass =		require("gulp-sass");
 const cleanCSS =	require("gulp-clean-css");
 const imagemin =	require("gulp-imagemin");
 const htmlmin =		require("gulp-htmlmin");
+const webserver =	require("gulp-webserver");
 const del =			require("del");
 const path =		require("path");
 
@@ -139,6 +137,7 @@ let webpackConfig = {
 
 let typescriptProject = typescript.createProject(paths.typescript.tsconfig);
 let verbose = false;
+let devServerPort = 3200;
 
 // Gulp tasks.
 
@@ -165,7 +164,10 @@ let verbose = false;
 	
 	// Watch for changes to relevant files and compile-on-change.
 	gulp.task("watch", watch);
-
+	
+	// Start a development HTTP webserver.
+	gulp.task("server", server);
+	
 // Overarching compile/build functions.
 
 	function defaultTask(done) {
@@ -237,8 +239,6 @@ let verbose = false;
 		return new Promise(resolve => webpack(webpackConfig, (err, stats) => {
 			
 			if (err) console.log('Webpack', err);
-			
-			console.log(stats.toString({ /* stats options */ }));
 			
 			resolve();
 			
@@ -347,10 +347,34 @@ let verbose = false;
 	}
 
 // Watch functions.
-	
+
 	function watch(done) {
 		
-		gulp.parallel(watchTypeScript, watchSCSS)(done);
+		gulp.parallel(watchConfig, watchFonts, watchImages, watchSCSS, watchTypeScript, watchHTML)(done);
+		
+	}
+	
+	function watchConfig(done) {
+		
+		gulp.watch([paths.config.srcFiles], copyConfigFiles);
+		
+	}
+	
+	function watchFonts(done) {
+		
+		gulp.watch([paths.fonts.srcFiles], copyFontFiles);
+		
+	}
+	
+	function watchImages(done) {
+		
+		gulp.watch([paths.images.srcFiles], minifyImages);
+		
+	}
+	
+	function watchSCSS(done) {
+		
+		gulp.watch([paths.styles.scss.allFiles], buildStylesPipeline);
 		
 	}
 	
@@ -360,8 +384,25 @@ let verbose = false;
 		
 	}
 	
-	function watchSCSS(done) {
+	function watchHTML(done) {
 		
-		gulp.watch([paths.styles.scss.allFiles], buildStylesPipeline());
+		gulp.watch([paths.html.srcFiles], minifyHTML);
+		
+	}
+
+// Development commands.
+
+	function server(done) {
+		
+		let port = devServerPort;
+		
+		gulp.src(paths.distDir)
+		.pipe(webserver({
+			host: "0.0.0.0",
+			port,
+			// livereload: true,
+			directoryListing: true,
+			open: "http://localhost:" + port + "/index.html"
+		}));
 		
 	}
