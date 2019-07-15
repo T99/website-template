@@ -23,15 +23,15 @@ let paths = {
 	
 	nodeModules: {
 		
-		dir: "node_modules",
+		dir: "node_modules/",
 		allFiles: "node_modules/**/*",
-		symlink: "../dist/node_modules"
+		symlink: "../dist/node_modules/"
 		
 	},
 	
 	typescript: {
 		
-		dir: "ts",
+		dir: "ts/",
 		allFiles: "ts/**/*.ts",
 		tsconfig: "ts/tsconfig.json"
 		
@@ -52,7 +52,7 @@ let paths = {
 		
 		css: {
 			
-			dir: "../dist/styles",
+			dir: "../dist/styles/",
 			cssFiles: "../dist/styles/**/*.css",
 			mapFiles: "../dist/styles/**/*.css.map",
 			allFiles: "../dist/styles/**/*.css*"
@@ -61,9 +61,9 @@ let paths = {
 		
 		scss: {
 			
-			dir: "styles",
+			dir: "styles/",
 			allFiles: "styles/**/*.scss",
-			cache: "styles/.sass-cache"
+			cache: "styles/.sass-cache/"
 			
 		}
 		
@@ -71,25 +71,25 @@ let paths = {
 	
 	config: {
 		
-		srcDir: "config",
+		srcDir: "config/",
 		srcFiles: "config/**/*",
-		distDir: "../dist/config"
+		distDir: "../dist/config/"
 		
 	},
 	
 	fonts: {
 		
-		srcDir: "fonts",
+		srcDir: "fonts/",
 		srcFiles: "fonts/**/*",
-		distDir: "../dist/fonts"
+		distDir: "../dist/fonts/"
 		
 	},
 	
 	images: {
 		
-		srcDir: "img",
+		srcDir: "img/",
 		srcFiles: "img/**/*",
-		distDir: "../dist/img"
+		distDir: "../dist/img/"
 		
 	},
 	
@@ -97,7 +97,7 @@ let paths = {
 		
 		srcDir: ".",
 		srcFiles: "./*.html",
-		distDir: "../dist"
+		distDir: "../dist/"
 		
 	}
 	
