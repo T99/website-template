@@ -39,7 +39,7 @@ let paths = {
 	
 	javascript: {
 		
-		dir: "../dist/js/",
+		dir: "../dist/js",
 		allFiles: "../dist/js/**/*.js",
 		entryPoint: "../dist/js/main.js",
 		entryPointFileName: "main.js",
@@ -95,7 +95,7 @@ let paths = {
 	
 	html: {
 		
-		srcDir: "./",
+		srcDir: ".",
 		srcFiles: "./*.html",
 		distDir: "../dist/"
 		
@@ -104,9 +104,11 @@ let paths = {
 };
 let webpackConfig = {
 	
-	devtool: "source-map",
+	mode: "development",
 	
 	entry: "../dist/js/main.js",
+	
+	devtool: "source-map",
 	
 	output: {
 		
@@ -123,7 +125,7 @@ let webpackConfig = {
 				
 				test: /\.js$/,
 				exclude: /node_modules/,
-				use: ['babel-loader'],
+				use: ['babel-loader']
 				
 			}
 		
@@ -134,7 +136,6 @@ let webpackConfig = {
 	plugins: []
 	
 };
-
 let typescriptProject = typescript.createProject(paths.typescript.tsconfig);
 let verbose = false;
 let devServerPort = 3200;
@@ -216,7 +217,7 @@ let devServerPort = 3200;
 		)(done);
 		
 	}
-
+	
 	function symlinkNodeModules(done) {
 		
 		return gulp.src(paths.nodeModules.dir)
@@ -249,7 +250,7 @@ let devServerPort = 3200;
 	function cleanJavaScriptFiles(done) {
 		
 		return del([
-			paths.javascript.dir + "**",
+			paths.javascript.dir + "/**",
 			"!" + paths.javascript.dir,
 			"!" + paths.javascript.bundleFile
 		],{ force: true });
@@ -286,7 +287,7 @@ let devServerPort = 3200;
 	}
 	
 	function minifyCSS(done) {
-	
+		
 		return gulp.src(paths.styles.css.cssFiles)
 			.pipe(sourcemaps.init({ loadMaps: true }))
 			.pipe(cleanCSS())
@@ -307,7 +308,7 @@ let devServerPort = 3200;
 		)(done);
 		
 	}
-
+	
 	function minifyImages(done) {
 		
 		return gulp.src(paths.images.srcFiles)
@@ -321,7 +322,7 @@ let devServerPort = 3200;
 	}
 	
 	function minifyHTML(done) {
-	
+		
 		return gulp.src(paths.html.srcFiles)
 			.pipe(htmlmin({
 				collapseInlineTagWhitespace: true,
@@ -331,9 +332,9 @@ let devServerPort = 3200;
 			.pipe(gulp.dest(paths.html.distDir));
 	
 	}
-
-	function copyConfigFiles(done) {
 	
+	function copyConfigFiles(done) {
+		
 		return gulp.src(paths.config.srcFiles)
 			.pipe(gulp.dest(paths.config.distDir));
 	
