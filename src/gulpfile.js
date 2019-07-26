@@ -73,7 +73,8 @@ let paths = {
 		
 		srcDir: "config/",
 		srcFiles: "config/**/*",
-		distDir: "../dist/config/"
+		distDir: "../dist/config/",
+		distFiles: "../dist/config/**/*"
 		
 	},
 	
@@ -81,7 +82,8 @@ let paths = {
 		
 		srcDir: "fonts/",
 		srcFiles: "fonts/**/*",
-		distDir: "../dist/fonts/"
+		distDir: "../dist/fonts/",
+		distFiles: "../dist/fonts/**/*"
 		
 	},
 	
@@ -89,7 +91,8 @@ let paths = {
 		
 		srcDir: "img/",
 		srcFiles: "img/**/*",
-		distDir: "../dist/img/"
+		distDir: "../dist/img/",
+		distFiles: "../dist/img/**/*"
 		
 	},
 	
@@ -97,7 +100,8 @@ let paths = {
 		
 		srcDir: ".",
 		srcFiles: "./*.html",
-		distDir: "../dist/"
+		distDir: "../dist/",
+		distFiles: "../dist/*.html"
 		
 	}
 	
@@ -146,7 +150,16 @@ let devServerPort = 3200;
 	gulp.task("default", defaultTask);
 	
 	// Cleans (deletes) all generated/compiled files.
-	gulp.task("clean", clean);
+	gulp.task("clean", cleanAll);
+	
+	// Cleans (deletes) all distribution JavaScript files.
+	gulp.task("clean-js", cleanJavaScriptFiles);
+	
+	// Cleans (deletes) all distribution styling files.
+	gulp.task("clean-styles", cleanStyles);
+
+	// Cleans (deletes) all miscellaneous distribution files.
+	gulp.task("clean-misc", cleanMiscFiles);
 	
 	// Builds the entire project.
 	gulp.task("build", build);
@@ -177,7 +190,7 @@ let devServerPort = 3200;
 		
 	}
 	
-	function clean(done) {
+	function cleanAll(done) {
 		
 		return del([
 			paths.distDir,
@@ -198,7 +211,7 @@ let devServerPort = 3200;
 	
 	function rebuild(done) {
 		
-		gulp.series(clean, build)(done);
+		gulp.series(cleanAll, build)(done);
 		
 	}
 	
@@ -207,14 +220,25 @@ let devServerPort = 3200;
 	function buildJavaScriptPipeline(done) {
 		
 		return gulp.series(
-			symlinkNodeModules,
+			gulp.parallel(
+				cleanJavaScriptFiles,
+				symlinkNodeModules
+			),
 			compileTypeScript,
 			transpileJavaScript,
 			gulp.parallel(
-				cleanJavaScriptFiles,
+				removeNonBundleFiles,
 				uglifyJavaScript
 			)
 		)(done);
+		
+	}
+	
+	function cleanJavaScriptFiles(done) {
+		
+		return del([
+			paths.javascript.allFiles
+		], { force: true });
 		
 	}
 	
@@ -247,7 +271,7 @@ let devServerPort = 3200;
 		
 	}
 	
-	function cleanJavaScriptFiles(done) {
+	function removeNonBundleFiles(done) {
 		
 		return del([
 			paths.javascript.dir + "/**",
@@ -260,7 +284,9 @@ let devServerPort = 3200;
 	function uglifyJavaScript(done) {
 		
 		return gulp.src(paths.javascript.bundleFile)
+			.pipe(sourcemaps.init({ loadMaps: true }))
 			.pipe(uglify())
+			.pipe(sourcemaps.write("."))
 			.pipe(gulp.dest(paths.javascript.dir));
 		
 	}
@@ -270,9 +296,18 @@ let devServerPort = 3200;
 	function buildStylesPipeline(done){
 		
 		return gulp.series(
+			cleanStyles,
 			compileSCSS,
 			minifyCSS
 		)(done);
+		
+	}
+	
+	function cleanStyles(done) {
+		
+		return del([
+			paths.styles.css.allFiles
+		], { force: true });
 		
 	}
 	
@@ -300,12 +335,26 @@ let devServerPort = 3200;
 
 	function miscOpsPipeline(done) {
 		
-		return gulp.parallel(
-			minifyHTML,
-			minifyImages,
-			copyFontFiles,
-			copyConfigFiles
+		return gulp.series(
+			cleanMiscFiles,
+			gulp.parallel(
+				minifyHTML,
+				minifyImages,
+				copyFontFiles,
+				copyConfigFiles
+			)
 		)(done);
+		
+	}
+	
+	function cleanMiscFiles(done) {
+		
+		return del([
+			paths.images.distFiles,
+			paths.html.distFiles,
+			paths.config.distFiles,
+			paths.fonts.distFiles
+		], { force: true });
 		
 	}
 	
