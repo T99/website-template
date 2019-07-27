@@ -1,5 +1,5 @@
 {
-	"name": "website-name",
+	"name": "project-name",
 	"version": "0.1.0",
 	"description": "Website description here.",
 	"main": "js/main.js",
@@ -8,15 +8,15 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/T99/website-name.git"
+		"url": "git+https://github.com/T99/project-name.git"
 	},
 	"keywords": [],
 	"author": "Trevor Sears <trevorsears.main@gmail.com>",
 	"license": "GPL-3.0-or-later",
 	"bugs": {
-		"url": "https://github.com/T99/website-name/issues"
+		"url": "https://github.com/T99/project-name/issues"
 	},
-	"homepage": "https://github.com/T99/website-name#readme",
+	"homepage": "https://github.com/T99/project-name#readme",
 	"dependencies": {
 		"regenerator-runtime": "^0.13.2"
 	},
