@@ -3,7 +3,7 @@
 #
 #   Created by Trevor Sears <trevorsears.main@gmail.com>.
 #   5:10 PM -- October 10th, 2019.
-#   Project: js-module-template
+#   Project: website-template
 #
 
 import json
@@ -67,12 +67,11 @@ if __name__ == "__main__":
 	github_org = input(STRING_INDENT + "Github user/org (default: " + config["default-github-user-org"] + "): ")
 	github_org = set_if_empty(github_org, config["default-github-user-org"])
 	readme_title = input(STRING_INDENT + "README title (default: " + package_name + "): ")
-	keywords = [keyword.strip() for keyword in keywords.split(",")]
 
 	print()
 
 	# Set the default value for values not specified by the user.
-	package_version = set_if_empty(package_version, "0.1.0")
+	package_version = "0.1.0"
 	package_desc_long = set_if_empty(package_desc_long, package_desc_short)
 	readme_title = set_if_empty(readme_title, package_name)
 
@@ -143,7 +142,6 @@ if __name__ == "__main__":
 		npm_config_json["version"] = package_version
 		npm_config_json["description"] = package_desc_short
 		npm_config_json["repository"]["url"] = "git+" + github_url
-		npm_config_json["keywords"] = keywords
 		npm_config_json["bugs"]["url"] = github_url + "/issues"
 		npm_config_json["homepage"] = github_url + "#readme"
 		npm_config.seek(0)
