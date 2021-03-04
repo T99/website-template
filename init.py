@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.7
+#!/usr/bin/env python3.8
 
 #
 #   Created by Trevor Sears <trevorsears.main@gmail.com>.
