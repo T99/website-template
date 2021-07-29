@@ -83,7 +83,7 @@
 		
 		"radix": false,
 		
-		"semicolon": [true, "always"],
+		"semicolon": [true, "always", "ignore-bound-class-methods"],
 		
 		"space-within-parens": [false],
 		
